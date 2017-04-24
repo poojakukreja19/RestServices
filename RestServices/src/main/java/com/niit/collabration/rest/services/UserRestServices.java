@@ -66,43 +66,40 @@ import com.niit.collabration.Model.Userdetail;
 				System.out.println("**************Ending of the method getUserByID");
 			  return	new ResponseEntity<Userdetail>(userdetail , HttpStatus.OK);
 			}
+
+	
 			
-//			//http://localhost:8080/RestServices/user/updateuser/{id}
-//			@PostMapping("/updateuser/{id}")
-//			public Userdetail updateUserDetails(@RequestBody Userdetail updateUserdetail)
-//				{
-//					
-//					//check whether the id exist or not
-//					
-//					userdetail=  userdetailDAO.getuserById(updateUserdetail.getId());
-//					userdetail.setId(47);
-//					userdetail.setName("simran");
-//					userdetail.setPassword("simran");
-//					userdetail.setIs_online('N');
-//					userdetail.setRole("CUSTOMER");
-//					
-//					if(userdetail!=null)
-//					{
-//						userdetailDAO.update(updateUserdetail);
-//						updateUserdetail.setErrorCode("200");
-//						updateUserdetail.setErrorMessage("Successfully updated the details");
-//					}
-//					else
-//					{
-//						updateUserdetail.setErrorCode("800");
-//						updateUserdetail.setErrorMessage("Could not updated. User does not exist with thid id " + updateUserdetail.getId());
-//					}
-//					
-//					return updateUserdetail;
-//					
-//				}
+		//http://localhost:8080/RestServices/user/updateuser/{id}
+			@PostMapping("/updateuser/{id}")
+			public ResponseEntity<Userdetail> UpdateUserDetails(@RequestBody Userdetail user,@PathVariable int id)
+				{
+					
+                         Userdetail Newuser = userdetailDAO.getuserById(id);
+                         Newuser.setId(user.getId());
+                         Newuser.setName(user.getName());
+                         Newuser.setPassword(user.getPassword());
+                         Newuser.setAddress(user.getAddress());
+                         Newuser.setContact(user.getContact());
+                         Newuser.setDOB(user.getDOB());
+                         Newuser.setMail(user.getMail());
+                         Newuser.setIs_online(user.getIs_online());
+                         Newuser.setReason(user.getReason());
+                         Newuser.setRole(user.getRole());  
+                         
+				userdetailDAO. update(Newuser);
+					
+					return new ResponseEntity<Userdetail>(user , HttpStatus.OK);
+
+				}		
+	
 			
-			//http://localhost:8080/RestServices/user/createuser
-			@PostMapping("/createuser/")
+	
+     		//http://localhost:8080/RestServices/user/createuser
+			@PostMapping("/createuser")
 			public Userdetail createUser(@RequestBody Userdetail newUser)
 			{
 				System.out.println("*******************Calling createUser method*************************** ");
-				//before creating user, check whether the id exist in the db or not
+			//before creating user, check whether the id exist in the db or not
 				
 				userdetail = userdetailDAO.getuserById(newUser.getId());
 				if( userdetail ==null)
@@ -123,13 +120,9 @@ import com.niit.collabration.Model.Userdetail;
 					newUser.setErrorCode("800");
 					newUser.setErrorMessage("Please choose another id as it is exist");
 					
-					
 				}
-				return newUser;
-				
-				
+		    	return newUser;	
+			}			
 			}
-			}
-			
 			
 	
