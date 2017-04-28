@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.niit.collabration.DAO.UserdetailDAO;
+import com.niit.collabration.Model.Blog;
 import com.niit.collabration.Model.Userdetail;
 
   
@@ -33,7 +35,7 @@ import com.niit.collabration.Model.Userdetail;
 			
 			//getAllUsers - @GetMapping    //ResPonsEntity
 			
-			//http://localhost:8080/RestServices/user/alluser
+			//http://localhost:8082/RestServices/user/alluser
 			@GetMapping("/alluser")
 			public ResponseEntity< List<Userdetail>> getAllUser()
 			{
@@ -69,7 +71,7 @@ import com.niit.collabration.Model.Userdetail;
 
 	
 			
-		//http://localhost:8080/RestServices/user/updateuser/{id}
+		//http://localhost:8082/RestServices/user/updateuser/{id}
 			@PostMapping("/updateuser/{id}")
 			public ResponseEntity<Userdetail> UpdateUserDetails(@RequestBody Userdetail user,@PathVariable int id)
 				{
@@ -92,9 +94,7 @@ import com.niit.collabration.Model.Userdetail;
 
 				}		
 	
-			
-	
-     		//http://localhost:8080/RestServices/user/createuser
+     		//http://localhost:8082/RestServices/user/createuser
 			@PostMapping("/createuser")
 			public Userdetail createUser(@RequestBody Userdetail newUser)
 			{
@@ -123,6 +123,37 @@ import com.niit.collabration.Model.Userdetail;
 				}
 		    	return newUser;	
 			}			
+			
+			//http://localhost:8082/RestServices/user/delete/{id}
+			@DeleteMapping("delete/{id}")
+			public Userdetail deleteUser(@PathVariable("id") int id)
+			{
+				
+				//whether record exist with this id or not
+				
+				
+			    if(	userdetailDAO.getuserById(id)==null)
+			    {
+			    	userdetail.setErrorCode("404");
+			    	userdetail.setErrorMessage("Could not delete.user does not exist with this id " + id);
+			    }
+			    else
+			    {
+			    	  if (userdetailDAO.deleteuserById(id))
+			    	  {
+			    		  userdetail.setErrorCode("200");
+			    		  userdetail.setErrorMessage("Successfully deleted");
+			    	  }
+			    	  else
+			    	  {
+			    		  userdetail.setErrorCode("404");
+			    		  userdetail.setErrorMessage("Could not delete. Please contact administrator");
+			    	  }  	
+			    }
+			    
+			    return userdetail;
+				
+}
 			}
 			
 	
