@@ -152,8 +152,30 @@ import com.niit.collabration.Model.Userdetail;
 			    }
 			    
 			    return userdetail;
-				
-}
+               }
+			
+			//http://localhost:8082/RestServices/user/validate/{id}/{password}
+			@GetMapping("/validate/{id}/{password}")
+			public Userdetail validateCredentials(@PathVariable("id") int id, @PathVariable("password") String password)
+			{
+				System.out.println("*****************calling the method validateCredentials*****************");
+				System.out.println("*****************Trying to validate for the id***********" +id);
+				if(userdetailDAO.validate(id, password))
+				{
+					System.out.println("***********valid credential*****************");
+					userdetail = userdetailDAO.getuserById(id);
+					userdetail.setErrorCode("200");
+					userdetail.setErrorMessage("Valid Credentials");
+				}
+				else
+				{
+					System.out.println("*****************Invalid Credential********************");
+					userdetail.setErrorCode("404");
+					userdetail.setErrorMessage("Invalid Credential");
+				}
+				System.out.println("*****************Ending of the Validate Method*****************");
+			    return userdetail;
 			}
+	}
 			
 	
